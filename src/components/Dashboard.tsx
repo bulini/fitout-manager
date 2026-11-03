@@ -3,7 +3,9 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { createStore } from "@/app/actions";
-import { STORE_STATUS_COLOR, STORE_STATUS_LABEL, type Store, type StoreStatus } from "@/lib/types";
+import { STORE_STATUS_COLOR, STORE_STATUS_LABEL, type Store, type StoreStatus, type Template } from "@/lib/types";
+
+type TplOption = Pick<Template, "id" | "name">;
 import { formatDate } from "@/lib/dates";
 
 const StoresMap = dynamic(() => import("./StoresMap"), {
@@ -13,7 +15,7 @@ const StoresMap = dynamic(() => import("./StoresMap"), {
 
 export type StoreWithCounts = Store & { open: number; overdue: number };
 
-export function Dashboard({ stores }: { stores: StoreWithCounts[] }) {
+export function Dashboard({ stores, templates }: { stores: StoreWithCounts[]; templates: TplOption[] }) {
   const [draft, setDraft] = useState<{ lat: number; lng: number } | null>(null);
   const [filter, setFilter] = useState<StoreStatus | "tutti">("tutti");
   const [q, setQ] = useState("");
@@ -55,7 +57,7 @@ export function Dashboard({ stores }: { stores: StoreWithCounts[] }) {
 
       <aside className="space-y-3">
         {draft ? (
-          <NewStoreForm draft={draft} onCancel={() => setDraft(null)} onMove={setDraft} />
+          <NewStoreForm draft={draft} templates={templates} onCancel={() => setDraft(null)} onMove={setDraft} />
         ) : (
           <div className="card p-3">
             <div className="flex gap-2">
@@ -110,10 +112,12 @@ function Stat({ label, value, tone }: { label: string; value: number; tone?: "la
 
 function NewStoreForm({
   draft,
+  templates,
   onCancel,
   onMove,
 }: {
   draft: { lat: number; lng: number };
+  templates: TplOption[];
   onCancel: () => void;
   onMove: (p: { lat: number; lng: number }) => void;
 }) {
@@ -176,6 +180,18 @@ function NewStoreForm({
         <label className="label">Responsabile</label>
         <input name="manager_name" className="input" />
       </div>
+      {templates.length > 0 && (
+        <div>
+          <label className="label">To-do iniziale da template</label>
+          <select name="template_id" className="input" defaultValue="">
+            <option value="">Nessuno</option>
+            {templates.map((t) => (
+              <option key={t.id} value={t.id}>{t.name}</option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-stone-500">Scadenze calcolate dalla data di apertura (se vuota, da oggi).</p>
+        </div>
+      )}
       <p className="text-xs text-stone-500">
         Posizione: {draft.lat.toFixed(5)}, {draft.lng.toFixed(5)} — puoi cliccare altrove sulla mappa per spostarla.
       </p>

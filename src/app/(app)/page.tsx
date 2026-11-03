@@ -7,9 +7,10 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const supabase = await createClient();
-  const [{ data: stores }, { data: openTasks }] = await Promise.all([
+  const [{ data: stores }, { data: openTasks }, { data: templates }] = await Promise.all([
     supabase.from("stores").select("*").order("name"),
     supabase.from("tasks").select("store_id, due_date").neq("status", "fatto"),
+    supabase.from("task_templates").select("id, name").order("name"),
   ]);
 
   const today = todayISO();
@@ -27,5 +28,5 @@ export default async function HomePage() {
     overdue: counts.get(s.id)?.overdue ?? 0,
   }));
 
-  return <Dashboard stores={data} />;
+  return <Dashboard stores={data} templates={templates ?? []} />;
 }

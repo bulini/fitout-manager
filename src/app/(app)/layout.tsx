@@ -16,9 +16,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">B</span>
             <span className="hidden sm:inline">Boxyland Manager</span>
           </Link>
-          <nav className="ml-4 flex gap-1 text-sm">
+          <nav className="ml-2 flex gap-1 overflow-x-auto text-sm sm:ml-4">
             <Link href="/" className="btn-ghost">Mappa</Link>
             <Link href="/tasks" className="btn-ghost">Cose da fare</Link>
+            <Link href="/templates" className="btn-ghost">Template</Link>
             <Link href="/settings" className="btn-ghost">Notifiche</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2 text-sm">

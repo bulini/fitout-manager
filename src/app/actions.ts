@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { StoreStatus, TaskStatus } from "@/lib/types";
+import { applyTemplateToStore } from "@/lib/templates";
 
 const str = (v: FormDataEntryValue | null) => {
   const s = (v ?? "").toString().trim();
@@ -41,6 +42,8 @@ export async function createStore(formData: FormData) {
     .select("id")
     .single();
   if (error) throw new Error(error.message);
+  const templateId = str(formData.get("template_id"));
+  if (templateId) await applyTemplateToStore(supabase, templateId, data.id, "apertura");
   revalidatePath("/");
   redirect(`/stores/${data.id}`);
 }

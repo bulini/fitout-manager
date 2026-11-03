@@ -12,6 +12,7 @@ Stack: Next.js 15 (App Router) · Supabase (auth + Postgres) · Leaflet/OpenStre
 | Mappa | Punti vendita con colore per stato (pianificato, in apertura, aperto, chiuso) e badge rosso con le task scadute. Clic sulla mappa → nuovo punto. Pin posizionabile anche dall'indirizzo (geocoding OSM). |
 | Punto vendita | Scheda modificabile + to-do list: scadenza, priorità, assegnatario, stato (da fare / in corso / fatto), note. |
 | Cose da fare | Vista unica di tutte le task aperte, ordinate per urgenza. Filtro "assegnate a me". |
+| Template | Liste di attività riutilizzabili con scadenze relative all'apertura (es. "30 g prima"). Si creano da zero o salvando la to-do di uno store, e si applicano a uno o più store (anche alla creazione). Le attività già presenti vengono saltate. |
 | Reminder | Ogni mattina (07:00 UTC) un cron prepara per ogni utente il riepilogo delle task scadute o in scadenza entro N giorni (impostabile) e lo manda sui canali attivi. Non invia mai due volte nello stesso giorno sullo stesso canale. |
 | AI | `src/lib/ai/index.ts`: per ora usa regole (scadenza + priorità + vicinanza all'apertura) per ordinare le task e scrivere il messaggio. Quando scegli il provider basta implementare l'interfaccia `AIProvider`. |
 
@@ -19,7 +20,7 @@ Stack: Next.js 15 (App Router) · Supabase (auth + Postgres) · Leaflet/OpenStre
 
 ### 1. Supabase
 1. Crea un progetto su [supabase.com](https://supabase.com).
-2. **SQL Editor** → incolla `supabase/migrations/0001_init.sql` → **Run**.
+2. **SQL Editor** → esegui in ordine i file di `supabase/migrations/` (`0001_init.sql`, `0002_templates.sql`, …) → **Run**.
 3. **Authentication → Sign In / Providers**: lascia attivo Email e **disattiva "Allow new users to sign up"** (l'app è privata).
 4. **Authentication → Users → Add user**: crea gli utenti del team (email + password, spunta "Auto confirm").
 5. **Project Settings → API**: copia URL, `anon key` e `service_role key`.
@@ -70,6 +71,5 @@ public/sw.js          service worker per le push
 
 ## Prossimi passi possibili
 - Collegare il provider AI (scomposizione automatica delle task, suggerimenti, messaggi personalizzati)
-- Checklist modello per le nuove aperture (task create in automatico a partire dalla data di apertura)
 - Ruoli (admin / responsabile di zona) e RLS per area
 - Comandi del bot Telegram per spuntare le task dalla chat

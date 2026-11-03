@@ -25,7 +25,25 @@ export interface Task {
   status: TaskStatus;
   assigned_to: string | null;
   completed_at: string | null;
+  template_id?: string | null;
   created_at: string;
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+}
+
+export interface TemplateItem {
+  id: string;
+  template_id: string;
+  title: string;
+  notes: string | null;
+  priority: 1 | 2 | 3;
+  offset_days: number | null;
+  position: number;
 }
 
 export interface Profile {

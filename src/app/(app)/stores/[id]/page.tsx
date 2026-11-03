@@ -6,16 +6,18 @@ import { STORE_STATUS_COLOR, STORE_STATUS_LABEL, type Profile, type Store, type 
 import { prioritizeTasks } from "@/lib/ai";
 import { TaskList } from "@/components/TaskList";
 import { ConfirmButton } from "@/components/ConfirmButton";
+import { StoreTemplatePanel } from "@/components/StoreTemplatePanel";
 
 export const dynamic = "force-dynamic";
 
 export default async function StorePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
-  const [{ data: store }, { data: tasks }, { data: team }] = await Promise.all([
+  const [{ data: store }, { data: tasks }, { data: team }, { data: templates }] = await Promise.all([
     supabase.from("stores").select("*").eq("id", id).single(),
     supabase.from("tasks").select("*").eq("store_id", id),
     supabase.from("profiles").select("id, full_name, email"),
+    supabase.from("task_templates").select("id, name").order("name"),
   ]);
   if (!store) notFound();
   const s = store as Store;
@@ -38,7 +40,14 @@ export default async function StorePage({ params }: { params: Promise<{ id: stri
         />
       </section>
 
-      <aside>
+      <aside className="space-y-4">
+        <StoreTemplatePanel
+          storeId={s.id}
+          storeName={s.name}
+          hasOpeningDate={!!s.opening_date}
+          templates={templates ?? []}
+          taskCount={ordered.length}
+        />
         <form action={updateStore.bind(null, s.id)} className="card space-y-3 p-4">
           <h2 className="font-semibold">Dati punto vendita</h2>
           <div>
