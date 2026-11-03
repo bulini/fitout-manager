@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { StoreStatus, TaskStatus } from "@/lib/types";
-import { applyTemplateToStore } from "@/lib/templates";
+import { applyTemplateToStore, shiftTemplateTasks } from "@/lib/templates";
 
 const str = (v: FormDataEntryValue | null) => {
   const s = (v ?? "").toString().trim();
@@ -50,6 +50,8 @@ export async function createStore(formData: FormData) {
 
 export async function updateStore(id: string, formData: FormData) {
   const { supabase } = await requireUser();
+  const { data: before } = await supabase.from("stores").select("opening_date").eq("id", id).single();
+  const newOpening = str(formData.get("opening_date"));
   const { error } = await supabase
     .from("stores")
     .update({
@@ -63,8 +65,12 @@ export async function updateStore(id: string, formData: FormData) {
     })
     .eq("id", id);
   if (error) throw new Error(error.message);
+  if (formData.get("shift_tasks") === "on" && newOpening && before?.opening_date !== newOpening) {
+    await shiftTemplateTasks(supabase, id, before?.opening_date ?? null, newOpening);
+  }
   revalidatePath(`/stores/${id}`);
   revalidatePath("/");
+  revalidatePath("/tasks");
 }
 
 export async function moveStore(id: string, lat: number, lng: number) {

@@ -57,6 +57,13 @@ export default async function StorePage({ params }: { params: Promise<{ id: stri
           <input type="date" name="opening_date" defaultValue={s.opening_date ?? ""} className="input" />
         </div>
       </div>
+      <label className="flex items-start gap-2.5 rounded-xl bg-stone-50 p-3 text-sm">
+        <input type="checkbox" name="shift_tasks" defaultChecked className="mt-0.5 h-5 w-5 shrink-0 accent-brand-600" />
+        <span>
+          Se cambio la data di apertura, sposta le scadenze delle attività da template
+          <span className="block text-xs text-stone-500">Solo quelle non completate.</span>
+        </span>
+      </label>
       <div>
         <label className="label">Responsabile</label>
         <input name="manager_name" defaultValue={s.manager_name ?? ""} className="input" />
