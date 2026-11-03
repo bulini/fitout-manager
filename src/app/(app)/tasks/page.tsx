@@ -30,26 +30,34 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
 
   return (
     <div className="mx-auto max-w-3xl space-y-3">
-      <div className="flex items-center justify-between">
+      <div>
         <h1 className="text-2xl font-semibold">Cose da fare</h1>
-        <div className="flex gap-1 text-sm">
-          <Link href="/tasks" className={mine ? "btn-ghost" : "btn-primary"}>Tutte</Link>
-          <Link href="/tasks?mine=1" className={mine ? "btn-primary" : "btn-ghost"}>Assegnate a me</Link>
-        </div>
+        <p className="text-sm text-stone-500">Ordinate per urgenza: scadenza, priorità e data di apertura.</p>
       </div>
-      <p className="text-sm text-stone-500">
-        Ordinate per urgenza: scadenza, priorità e vicinanza alla data di apertura del punto vendita.
-      </p>
-      <div className="card divide-y divide-stone-100">
+      <div className="grid grid-cols-2 gap-1 rounded-xl bg-stone-200/70 p-1 md:inline-grid">
+        {[
+          { href: "/tasks", label: `Tutte`, on: !mine },
+          { href: "/tasks?mine=1", label: "Assegnate a me", on: !!mine },
+        ].map((x) => (
+          <Link
+            key={x.href}
+            href={x.href}
+            className={`rounded-lg px-4 py-2 text-center text-sm font-medium ${x.on ? "bg-white shadow-sm" : "text-stone-600"}`}
+          >
+            {x.label}
+          </Link>
+        ))}
+      </div>
+      <div className="card divide-y divide-stone-100 overflow-hidden">
         {list.length === 0 && <p className="p-6 text-center text-sm text-stone-500">Tutto fatto 🎉</p>}
         {list.map(({ t, s }) => {
           const due = dueLabel(t.due_date);
           return (
-            <Link key={t.id} href={`/stores/${s.id}`} className="flex items-start gap-3 p-3 hover:bg-stone-50">
+            <Link key={t.id} href={`/stores/${s.id}`} className="flex items-start gap-3 p-3.5 active:bg-stone-50 md:hover:bg-stone-50">
               <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: STORE_STATUS_COLOR[s.status] }} />
               <div className="min-w-0 flex-1">
-                <div className="font-medium">{t.title}</div>
-                <div className="text-xs text-stone-500">
+                <div className="font-medium leading-snug">{t.title}</div>
+                <div className="mt-0.5 text-xs text-stone-500">
                   {s.name}
                   {s.opening_date && ` · apre ${formatDate(s.opening_date)}`}
                 </div>

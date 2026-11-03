@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { updateProfile } from "@/app/actions";
+import { signOut, updateProfile } from "@/app/actions";
 import type { Profile } from "@/lib/types";
 import { PushToggle } from "@/components/PushToggle";
 import { TestReminderButton } from "@/components/TestReminderButton";
@@ -20,7 +20,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
-      <h1 className="text-2xl font-semibold">Notifiche e reminder</h1>
+      <h1 className="text-2xl font-semibold">Notifiche</h1>
 
       <div className="card space-y-2 p-4">
         <h2 className="font-semibold">Notifiche push su questo dispositivo</h2>
@@ -47,7 +47,7 @@ export default async function SettingsPage() {
         <fieldset className="space-y-2">
           <legend className="label">Canali</legend>
           <Check name="notify_push" label="Push (browser / telefono)" checked={p?.notify_push} available={channels.push} />
-          <Check name="notify_email" label={`Email (${p?.email ?? ""})`} checked={p?.notify_email} available={channels.email} />
+          <Check name="notify_email" label="Email" checked={p?.notify_email} available={channels.email} />
           <Check name="notify_telegram" label="Telegram" checked={p?.notify_telegram} available={channels.telegram} />
         </fieldset>
         <div>
@@ -58,16 +58,26 @@ export default async function SettingsPage() {
           </p>
         </div>
         <div className="flex justify-end">
-          <button className="btn-primary">Salva</button>
+          <button className="btn-primary w-full sm:w-auto">Salva</button>
         </div>
       </form>
 
-      <div className="card flex items-center justify-between gap-3 p-4">
+      <div className="card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="font-semibold">Prova</h2>
           <p className="text-sm text-stone-500">Ricevi adesso il riepilogo sui canali attivi.</p>
         </div>
         <TestReminderButton />
+      </div>
+
+      <div className="card flex items-center justify-between gap-3 p-4">
+        <div className="min-w-0">
+          <h2 className="font-semibold">Account</h2>
+          <p className="truncate text-sm text-stone-500">{user?.email}</p>
+        </div>
+        <form action={signOut}>
+          <button className="btn-outline">Esci</button>
+        </form>
       </div>
     </div>
   );
@@ -75,10 +85,12 @@ export default async function SettingsPage() {
 
 function Check({ name, label, checked, available }: { name: string; label: string; checked?: boolean; available: boolean }) {
   return (
-    <label className="flex items-center gap-2 text-sm">
-      <input type="checkbox" name={name} defaultChecked={checked} className="h-4 w-4 accent-brand-600" />
-      {label}
-      {!available && <span className="text-xs text-amber-700">(non configurato sul server)</span>}
+    <label className="flex min-h-11 items-center gap-3 rounded-xl border border-stone-200 px-3 py-2">
+      <input type="checkbox" name={name} defaultChecked={checked} className="h-5 w-5 shrink-0 accent-brand-600" />
+      <span className="min-w-0 flex-1">
+        <span className="block text-[15px]">{label}</span>
+        {!available && <span className="block text-xs text-amber-700">Non ancora configurato sul server</span>}
+      </span>
     </label>
   );
 }

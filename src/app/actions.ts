@@ -117,8 +117,10 @@ export async function updateTask(taskId: string, storeId: string, formData: Form
       due_date: str(formData.get("due_date")),
       priority: Number(formData.get("priority") ?? 2),
       assigned_to: str(formData.get("assigned_to")),
+      ...(str(formData.get("status")) ? { status: str(formData.get("status")) as TaskStatus } : {}),
     })
     .eq("id", taskId);
+  revalidatePath("/");
   if (error) throw new Error(error.message);
   revalidatePath(`/stores/${storeId}`);
 }

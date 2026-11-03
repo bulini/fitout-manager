@@ -37,11 +37,11 @@ export function TemplateItemRow({ item, isFirst, isLast }: { item: TemplateItem;
   }
 
   return (
-    <div className="flex items-center gap-2 p-3">
+    <div className="flex items-center gap-1 py-2 pl-1 pr-3">
       <div className="flex flex-col">
-        <button className="px-1 text-xs text-stone-400 hover:text-stone-800 disabled:opacity-20" disabled={isFirst}
+        <button className="flex h-8 w-8 items-center justify-center rounded-lg text-xs text-stone-400 active:bg-stone-100 hover:text-stone-800 disabled:opacity-20" disabled={isFirst}
           onClick={() => moveTemplateItem(item.id, item.template_id, -1)} aria-label="Su">▲</button>
-        <button className="px-1 text-xs text-stone-400 hover:text-stone-800 disabled:opacity-20" disabled={isLast}
+        <button className="flex h-8 w-8 items-center justify-center rounded-lg text-xs text-stone-400 active:bg-stone-100 hover:text-stone-800 disabled:opacity-20" disabled={isLast}
           onClick={() => moveTemplateItem(item.id, item.template_id, 1)} aria-label="Giù">▼</button>
       </div>
       <button className="min-w-0 flex-1 text-left" onClick={() => setEditing(true)}>

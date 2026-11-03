@@ -22,8 +22,8 @@ export function TestReminderButton() {
   }
 
   return (
-    <div className="text-right">
-      <button className="btn-primary" onClick={run} disabled={loading}>
+    <div className="sm:text-right">
+      <button className="btn-outline w-full sm:w-auto" onClick={run} disabled={loading}>
         {loading ? "Invio…" : "Invia ora"}
       </button>
       {state && <p className="mt-1 text-xs text-stone-600">{state}</p>}

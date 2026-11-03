@@ -8,6 +8,7 @@ import {
   updateTemplate,
 } from "@/app/templates-actions";
 import { ConfirmButton } from "@/components/ConfirmButton";
+import { BackIcon } from "@/components/Icons";
 import { OffsetFields } from "@/components/OffsetFields";
 import { TemplateItemRow } from "@/components/TemplateItemRow";
 import { ApplyToStores } from "@/components/ApplyToStores";
@@ -28,11 +29,11 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
   const list = (items ?? []) as TemplateItem[];
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
+    <div className="grid gap-4 md:grid-cols-[1fr_340px]">
       <section className="space-y-3">
-        <div className="text-sm text-stone-500">
-          <Link href="/templates" className="hover:underline">Template</Link> / {t.name}
-        </div>
+        <Link href="/templates" className="inline-flex items-center text-sm text-stone-500">
+          <BackIcon className="h-4 w-4" /> Template
+        </Link>
 
         <form action={updateTemplate.bind(null, t.id)} className="card space-y-2 p-4">
           <input name="name" defaultValue={t.name} required className="input text-lg font-semibold" />
@@ -50,15 +51,17 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
           </div>
         </form>
 
-        <form action={addTemplateItem.bind(null, t.id)} className="card flex flex-wrap items-center gap-2 p-3">
-          <input name="title" required placeholder="Nuova attività…" className="input min-w-[200px] flex-1" />
-          <OffsetFields />
-          <select name="priority" defaultValue="2" className="input w-auto">
-            <option value="1">Alta</option>
-            <option value="2">Media</option>
-            <option value="3">Bassa</option>
-          </select>
-          <button className="btn-primary">Aggiungi</button>
+        <form action={addTemplateItem.bind(null, t.id)} className="card space-y-2 p-3">
+          <input name="title" required placeholder="Nuova attività…" className="input" />
+          <div className="flex flex-wrap items-center gap-2">
+            <OffsetFields />
+            <select name="priority" defaultValue="2" className="input w-28 sm:w-auto" aria-label="Priorità">
+              <option value="1">Alta</option>
+              <option value="2">Media</option>
+              <option value="3">Bassa</option>
+            </select>
+            <button className="btn-primary flex-1 sm:ml-auto sm:flex-none">Aggiungi</button>
+          </div>
         </form>
 
         <div className="card divide-y divide-stone-100">

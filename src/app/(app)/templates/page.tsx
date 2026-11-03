@@ -21,8 +21,8 @@ export default async function TemplatesPage() {
         </p>
       </div>
 
-      <form action={createTemplate} className="card flex flex-wrap gap-2 p-3">
-        <input name="name" required placeholder="Nome template, es. Apertura standard" className="input min-w-[200px] flex-1" />
+      <form action={createTemplate} className="card flex flex-col gap-2 p-3 sm:flex-row">
+        <input name="name" required placeholder="Nome, es. Apertura standard" className="input flex-1" />
         <button className="btn-primary">Crea template</button>
       </form>
       <p className="text-xs text-stone-500">

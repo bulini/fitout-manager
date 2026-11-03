@@ -60,9 +60,9 @@ export function PushToggle({ vapidKey }: { vapidKey: string }) {
   if (!supported) return <p className="text-sm text-amber-700">Questo browser non supporta le notifiche push.</p>;
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
       {sub ? (
-        <button className="btn-ghost border border-stone-200" onClick={disable} disabled={busy}>Disattiva su questo dispositivo</button>
+        <button className="btn-outline" onClick={disable} disabled={busy}>Disattiva su questo dispositivo</button>
       ) : (
         <button className="btn-primary" onClick={enable} disabled={busy}>🔔 Attiva notifiche</button>
       )}
