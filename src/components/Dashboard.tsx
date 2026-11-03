@@ -192,7 +192,7 @@ export function Dashboard({ stores, templates }: { stores: StoreWithCounts[]; te
                   <div className="pointer-events-auto flex gap-2 text-xs font-medium">
                     <Chip>{totals.inApertura} in apertura</Chip>
                     <Chip>{totals.open} da fare</Chip>
-                    {totals.overdue > 0 && <Chip tone="late">{totals.overdue} scadute</Chip>}
+                    {totals.overdue > 0 && <Chip tone="late">{totals.overdue} {totals.overdue === 1 ? "scaduta" : "scadute"}</Chip>}
                   </div>
                 </>
               )}

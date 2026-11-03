@@ -49,9 +49,9 @@ export async function sendEmail(to: string, msg: ReminderMessage): Promise<boole
   const resend = new Resend(key);
   const html = `
     <div style="font-family:system-ui,sans-serif;max-width:560px;margin:auto">
-      <h2 style="color:#ea580c">Boxyland Manager</h2>
+      <h2 style="color:#00859b">Boxyland Manager</h2>
       <pre style="font:14px/1.6 system-ui,sans-serif;white-space:pre-wrap">${escapeHtml(msg.text)}</pre>
-      <p><a href="${APP_URL}/tasks" style="background:#ea580c;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Apri le cose da fare</a></p>
+      <p><a href="${APP_URL}/tasks" style="background:#00859b;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Apri le cose da fare</a></p>
     </div>`;
   const { error } = await resend.emails.send({
     from: process.env.EMAIL_FROM ?? "Boxyland Manager <onboarding@resend.dev>",
